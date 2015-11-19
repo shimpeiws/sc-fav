@@ -27,3 +27,8 @@ gulp.task('compile-css', ->
   .pipe($.concat('app.css'))
   .pipe(gulp.dest('app'))
 )
+
+gulp.task('watch', ->
+  gulp
+  .watch('src/**/*.+(js|jsx)', ['compile'])
+)
