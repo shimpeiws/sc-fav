@@ -16,6 +16,7 @@ gulp.task('compile-html', ->
 gulp.task('compile-js', ->
   gulp
   .src('src/**/*.+(js|jsx)')
+  .pipe($.plumber())
   .pipe($.babel())
   .pipe(gulp.dest('app'))
 )
