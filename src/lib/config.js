@@ -4,18 +4,13 @@ import fs from 'fs';
 
 export default class Config {
     constructor(options = {}) {
-        console.log('config INIT!!!');
         this.options = _.extend({}, options);
         this.configFile = app.getPath('userData') + '/config.json';
-        console.log('this.configFile', this.configFile);
     }
 
     set(key, val, callback) {
-        console.log('key', key);
-        console.log('val', val);
         this.options[key] = val;
         fs.writeFile(this.configFile, JSON.stringify(this.options), (err) =>  {
-            console.log("setError occured!!!!", err);
             if(err) {
                 return callback(err);
             }
@@ -25,7 +20,7 @@ export default class Config {
     }
 
     get(key, callback) {
-        fs.readFile(CONFIG_FILE, function(err, data) {
+        fs.readFile(this.configFile, function(err, data) {
             if(err) {
                 return callback(err);
             }

@@ -27,9 +27,8 @@ export default class Auth {
 
                 let hash = uri.hash.substr(1);
                 let token = querystring.parse(hash).access_token;
-                console.log('token', token);
-                this.config.set('token', token, (err) => {
-                    console.log('config Error', err);
+                this.config.set('token', token, (_err) => {
+                    // TODO: Error handling
                 });
 
                 this.loginCallback();
