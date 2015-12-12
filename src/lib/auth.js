@@ -1,3 +1,4 @@
+import app from 'app';
 import BrowserWindow from 'browser-window';
 import url from 'url';
 import querystring from 'querystring';
@@ -5,7 +6,7 @@ import Config from './config';
 
 export default class Auth {
     constructor(options) {
-        this.config        = new Config();
+        this.config        = new Config({configFilePath: app.getPath('userData') + '/config.json'});
         this.token         = null;
         this.loginWindow   = null;
         this.loginCallback = options.loginCallback;
@@ -27,7 +28,11 @@ export default class Auth {
 
                 let hash = uri.hash.substr(1);
                 let token = querystring.parse(hash).access_token;
-                this.config.set('token', token, (_err) => {
+                this.config.set('token', token)
+                .then(() => {
+                    // Do Nothing
+                })
+                .catch((err) => {
                     // TODO: Error handling
                 });
 
@@ -48,5 +53,17 @@ export default class Auth {
             'node-integration': false
         });
         this.loginWindow.loadURL(url);
+    }
+
+    getToken() {
+        return new Promise((resolve, reject) => {
+            this.config.get('token')
+            .then((token) => {
+                resolve(token);
+            })
+            .catch((error) => {
+                // TODO: Error handling
+            });
+        });
     }
 }

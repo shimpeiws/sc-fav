@@ -7,6 +7,7 @@ if(process.env.NODE_ENV === 'develop'){
 }
 
 app.on('ready', () => {
+    app.commandLine.appendSwitch('enable-usermedia-screen-capturing');
     let window = new WindowManager({
         clientId: '964d428beee7b8d4350fc942c594fd7d',
         indexPath: '/renderer/index.html'

@@ -1,32 +1,35 @@
 import _ from 'lodash';
-import app from 'app';
 import fs from 'fs';
 
 export default class Config {
     constructor(options = {}) {
         this.options = _.extend({}, options);
-        this.configFile = app.getPath('userData') + '/config.json';
+        this.configFile = this.options.configFilePath;
     }
 
-    set(key, val, callback) {
+    set(key, val) {
         this.options[key] = val;
-        fs.writeFile(this.configFile, JSON.stringify(this.options), (err) =>  {
-            if(err) {
-                return callback(err);
-            }
+        return new Promise((resolve, reject) => {
+            fs.writeFile(this.configFile, JSON.stringify(this.options), (error) =>  {
+                if(error) {
+                    reject(error);
+                }
 
-            callback(null);
+                resolve();
+            });
         });
     }
 
-    get(key, callback) {
-        fs.readFile(this.configFile, function(err, data) {
-            if(err) {
-                return callback(err);
-            }
+    get(key) {
+        return new Promise((resolve, reject) => {
+            fs.readFile(this.configFile, (error, data) => {
+                if(error) {
+                    reject(error);
+                }
 
-            data = JSON.parse(data);
-            return callback(null, data[key]);
+                data = JSON.parse(data);
+                resolve(data[key]);
+            });
         });
     }
 }
